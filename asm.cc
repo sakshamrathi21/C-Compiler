@@ -56,7 +56,7 @@ string ins_to_string(asm_instruction ins)
         case _push: to_be_returned = "push"; break;
         case _pop: to_be_returned = "pop"; break;
         case _iLoad: to_be_returned = "iLoad"; break;
-        case iLoad_d: to_be_returned = "iLoad.d"; break;
+        case _iLoad_d: to_be_returned = "iLoad.d"; break;
         case _load: to_be_returned = "load"; break;
         case _load_d: to_be_returned = "load.d"; break;
         case _load_addr: to_be_returned = "load_addr"; break;
@@ -114,7 +114,7 @@ string ins_to_string(asm_instruction ins)
         case _la: to_be_returned = "la"; break;
         case _lw_w: to_be_returned = "lw.w"; break;
         case _sw: to_be_returned = "sw"; break;
-        case s_d: to_be_returned = "s.d"; break;
+        case _s_d: to_be_returned = "s.d"; break;
         case _xori: to_be_returned = "xori"; break;
         case _mov_d: to_be_returned = "mov.d"; break;
         case _j: to_be_returned = "j"; break;
@@ -170,7 +170,7 @@ Compute_ASM_Statement::Compute_ASM_Statement(ASM_Opd* first1, ASM_Opd* second1, 
     else if (rtl_ins = move_) asm_ins = _move;
     else if (rtl_ins == movt_) asm_ins = _movt;
     else if (rtl_ins == movf_) asm_ins = _movf;
-    else if (rtl_ins == sqt_) asm_ins = _sgt;
+    else if (rtl_ins == sgt_) asm_ins = _sgt;
     else if (rtl_ins == sle_d_) asm_ins = _c_le_d;
     else if (rtl_ins == sge_) asm_ins = _sge;
     else if (rtl_ins == slt_d_) asm_ins = _c_lt_d;
@@ -178,7 +178,7 @@ Compute_ASM_Statement::Compute_ASM_Statement(ASM_Opd* first1, ASM_Opd* second1, 
     else if (rtl_ins == sle_) asm_ins = _sle;
     else if (rtl_ins == and_) asm_ins = _and;
     else if (rtl_ins == or_) asm_ins = _or;
-    else if (rtl_ins == not_) {asm_ins = _xr1; second = new ASM_Int_Const_Opd(1);};
+    else if (rtl_ins == not_) {asm_ins = _xori; second = new ASM_Int_Const_Opd(1);};
 }
 
 ASM_Mem_Opd::ASM_Mem_Opd(int offset, reg base_reg) : offset(offset), base_reg(base_reg)
@@ -191,7 +191,7 @@ ASM_Mem_Opd::ASM_Mem_Opd(string var_name) : var_name(var_name)
 
 }
 
-string ASM_Mem_Opd:;get_operand_string()
+string ASM_Mem_Opd::get_operand_string()
 {
     if (var_name != "") return var_name + "_";
     return to_string(offset) + "(" + reg_to_string(base_reg) + ")";
